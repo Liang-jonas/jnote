@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Liang-jonas/golib"
 	"github.com/Liang-jonas/golib/logger"
+	Auth "github.com/Liang-jonas/jnote/Auth/Controller"
 	"github.com/Liang-jonas/jnote/Conf"
 	"github.com/Liang-jonas/jnote/DB/Mysql"
 	"github.com/Liang-jonas/jnote/DB/Redis"
@@ -36,16 +37,16 @@ func RunServer(cfgPath string) {
 
 	mDB, err := Mysql.NewDB(cfg.MysqlCfg)
 	if err != nil {
-		logger.Errorf("mysqlDB error: %s", err)
+		logger.Errorf("MySQL error: %s", err)
 		return
 	}
 	defer mDB.Close()
-	logger.Infof("mysql database connection to %s:%s, dbName: %s, options: %s", cfg.MysqlCfg.Ip,
+	logger.Infof("MySQL database connection to %s:%s, dbName: %s, options: %s", cfg.MysqlCfg.Ip,
 		cfg.MysqlCfg.Port, cfg.MysqlCfg.Dbname, cfg.MysqlCfg.Options)
 
 	rDB, err := Redis.NewDB(cfg.RedisCfg)
 	if err != nil {
-		logger.Errorf("redisDB error: %s", err)
+		logger.Errorf("Redis error: %s", err)
 		return
 	}
 	defer rDB.Close()
@@ -69,6 +70,8 @@ func RunServer(cfgPath string) {
 		gzip.Gzip(gzip.DefaultCompression),
 	)
 
+	Auth.New(cfg.BaseCfg.UriPrefix, ginEngine, logger, mDB, rDB, jwtEngine)
+
 	if cfg.BaseCfg.Mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -82,13 +85,13 @@ func ServerCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "server",
 		Short:   "Run the jnote server.",
-		Long:    "Run the video-download service and start it by default or by specifying a configuration file.",
+		Long:    "Run the jnote service and start it by default or by specifying a configuration file.",
 		GroupID: rootGroupID,
 		Run: func(cmd *cobra.Command, args []string) {
 			var cfgPath string
 			cmd.Flags().StringVarP(&cfgPath, "file", "f", "", "set config path")
 			cmd.Flags().Parse(args)
-			//RunServer(cfgPath)
+			RunServer(cfgPath)
 		},
 		DisableSuggestions: true,
 		DisableFlagParsing: true,

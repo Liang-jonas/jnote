@@ -2,7 +2,7 @@ package JWT
 
 import (
 	"errors"
-	"github.com/Liang-jonas/jnote/Models/DTO"
+	"github.com/Liang-jonas/jnote/Auth/DTO"
 	"strings"
 
 	"github.com/golang-jwt/jwt"
@@ -29,7 +29,6 @@ func (e *engine) Parse(text string) (*DTO.User, error) {
 		u.Username = claims.Audience
 		u.Group = claims.Group
 		u.ID = claims.UID
-		u.ExpiresAt = claims.ExpiresAt
 		return u, err
 	}
 	return nil, errors.New("parse Jwt error")

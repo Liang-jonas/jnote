@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/Liang-jonas/jnote/Conf"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const dsnFormat = "%s:%s@tcp(%s:%s)/%s?%s"
@@ -55,6 +56,8 @@ func NewDB(cfg Conf.Mysql) (Repo, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
+	db.SetMaxIdleConns(cfg.PoolSize)
+	db.SetMaxOpenConns(cfg.PoolSize)
 	repo.db = db
 	return repo, nil
 }

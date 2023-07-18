@@ -1,8 +1,8 @@
 package JWT
 
 import (
+	"github.com/Liang-jonas/jnote/Auth/DTO"
 	"github.com/Liang-jonas/jnote/Conf"
-	"github.com/Liang-jonas/jnote/Models/DTO"
 )
 
 var _ Engine = (*engine)(nil)

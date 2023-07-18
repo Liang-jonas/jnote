@@ -1,7 +1,7 @@
 package JWT
 
 import (
-	"github.com/Liang-jonas/jnote/Models/DTO"
+	"github.com/Liang-jonas/jnote/Auth/DTO"
 	"time"
 
 	"github.com/golang-jwt/jwt"

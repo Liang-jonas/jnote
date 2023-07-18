@@ -8,3 +8,5 @@ ldflags += -X 'github.com/Liang-jonas/jnote/Cmd.defaultCfgPath=${APP_CONFIG_PATH
 
 build:
 	go build -ldflags "${ldflags}" -o jnote-server
+
+# go build -ldflags "-X 'github.com/Liang-jonas/jnote/Cmd.defaultCfgPath=D:\\go\\src\\github.com\\Liang-jonas\\jnote\\config.ini'" -o jnote-server.exe
